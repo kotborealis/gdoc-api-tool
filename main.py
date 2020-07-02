@@ -4,20 +4,24 @@ import json
 
 
 def main():
+    """gdoc-api-tool entrypoint"""
+
+    # Arguments parser
     parser = argparse.ArgumentParser(description='Google Drive Tools.')
 
     parser.add_argument('--auth-url',
                         action='store_true',
-                        help='Get authentication URL')
+                        help='Call Google OAuth and show authentication URL')
 
     parser.add_argument('--auth-code',
-                        help='Specify authentication code')
+                        help='Send authentication code to Google OAuth to obtain new token')
 
     parser.add_argument('--create',
-                        help='Create and share google document with specified name')
+                        help='Create and share Google Document with specified name')
 
     args = parser.parse_args()
 
+    # Load, refresh & save credentials
     creds = gdrive_utils.load_credentials()
     gdrive_utils.refresh_credentials(creds)
     gdrive_utils.save_credentials(creds)
@@ -30,13 +34,19 @@ def main():
         gdrive_utils.save_credentials(creds)
         return
 
+    # Check if credentials are valid
     if not creds:
         print("Not authorized, use --auth-url and --auth-code")
         return
         
     if args.create:
-        file = gdrive_utils.create_document(gdrive_utils.load_credentials(), args.create)
+        # Create new file with specified name
+        document_name = args.create
+        file = gdrive_utils.create_document(gdrive_utils.load_credentials(), document_name)
+
+        # Share created file
         gdrive_utils.share_file(gdrive_utils.load_credentials(), file.get("id"))
+
         print(json.dumps(file))
 
 
