@@ -1,8 +1,29 @@
-# Setup
+# gdoc-api-tool
 
-* [create a new Cloud Platform project and enable the Drive API](https://developers.google.com/drive/api/v3/quickstart/python)
-* download client configuration
-* place credentials.json into working directory
+```shell script
+C:\kotborealis\gdoc-api-tool>python main.py --help
+usage: main.py [-h] [--auth-url] [--auth-code AUTH_CODE] [--create CREATE]
+
+Google Drive Tools.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --auth-url            Get authentication URL
+  --auth-code AUTH_CODE
+                        Specify authentication code
+  --create CREATE       Create and share google document with specified name
+```
+
+## Setup
+
+* Recommended python version >=3.5
+* [Create a new Cloud Platform project and enable the Drive API](https://developers.google.com/drive/api/v3/quickstart/python)
+* Download client configuration from Google Cloud Platform
+* Place credentials.json into project directory
+* Install dependencies from `requirements.txt`
+* Running: `python3 main.py <args>`
+    
+
 
 ## Auth
 
