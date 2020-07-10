@@ -17,7 +17,14 @@ def main():
                         help='Send authentication code to Google OAuth to obtain new token')
 
     parser.add_argument('--create',
-                        help='Create and share Google Document with specified name')
+                        dest='file_name',
+                        help='Create and share Google Drive file with specified name')
+
+    parser.add_argument('--type',
+                        dest='file_type',
+                        default='document',
+                        choices=gdrive_utils.mime_types.keys(),
+                        help='Document type')
 
     args = parser.parse_args()
 
@@ -38,11 +45,14 @@ def main():
     if not creds:
         print("Not authorized, use --auth-url and --auth-code")
         return
-        
-    if args.create:
+
+    if args.file_name:
         # Create new file with specified name
-        document_name = args.create
-        file = gdrive_utils.create_document(gdrive_utils.load_credentials(), document_name)
+        file = gdrive_utils.create_file(
+            gdrive_utils.load_credentials(),
+            args.file_name,
+            args.file_type
+        )
 
         # Share created file
         gdrive_utils.share_file(gdrive_utils.load_credentials(), file.get("id"))

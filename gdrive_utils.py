@@ -9,6 +9,13 @@ from google.auth.transport.requests import Request
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
 
+# Mapping of supported file types to google MIME types
+mime_types = {
+    'document': 'application/vnd.google-apps.document',
+    'spreadsheet': 'application/vnd.google-apps.spreadsheet'
+}
+
+
 def load_credentials():
     """Loads credentials from file named `token.pickle`"""
 
@@ -60,8 +67,8 @@ def auth_code(code):
     return flow.credentials
 
 
-def create_file(creds, name: str, mime_type: str = None, parents: typing.List[str] = None):
-    """Create file with specified name, mime_type with specified parent list"""
+def create_file_with_mime_type(creds, name: str, mime_type: str = None, parents: typing.List[str] = None):
+    """Create file with specified name, mime_type and parent list"""
 
     # Create service to call Google Drive API
     service = build('drive', 'v3', credentials=creds)
@@ -77,10 +84,9 @@ def create_file(creds, name: str, mime_type: str = None, parents: typing.List[st
     ).execute()
 
 
-def create_document(creds, name: str, parents: typing.List[str] = None):
-    """Create Google Document (file with mime-type `application/vnd.google-apps.document`"""
-
-    return create_file(creds, name, mime_type='application/vnd.google-apps.document', parents=parents)
+def create_file(creds, name: str, type: str, parents: typing.List[str] = None):
+    """Create file with specified name, type and parent list"""
+    return create_file_with_mime_type(creds, name, mime_types[type], parents)
 
 
 def share_file(creds, file_id: any):
