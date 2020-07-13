@@ -88,7 +88,7 @@ def create_file_with_mime_type(creds, name: str, mime_type: str = None, parents:
     """Create file with specified name, mime_type and parent list"""
 
     # Create service to call Google Drive API
-    service = build('drive', 'v3', credentials=creds)
+    service = build('drive', 'v3', credentials=creds, cache_discovery=False)
 
     return service.files().create(
         body={
@@ -109,7 +109,7 @@ def create_file(creds, name: str, type: str, parents: typing.List[str] = None):
 def share_file(creds, file_id: any):
     """Share edit access to anyone with link to the document"""
 
-    service = build('drive', 'v3', credentials=creds)
+    service = build('drive', 'v3', credentials=creds, cache_discovery=False)
 
     return service.permissions().create(
         fileId=file_id,
