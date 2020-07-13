@@ -9,6 +9,10 @@ def main():
     # Arguments parser
     parser = argparse.ArgumentParser(description='Google Drive Tools.')
 
+    parser.add_argument('--auth-info',
+                        action='store_true',
+                        help='Print credentials info')
+
     parser.add_argument('--auth-url',
                         action='store_true',
                         help='Call Google OAuth and show authentication URL')
@@ -28,8 +32,20 @@ def main():
 
     args = parser.parse_args()
 
-    # Load, refresh & save credentials
+    # Load credentials
     creds = gdrive_utils.load_credentials()
+
+    if args.auth_info:
+        if creds:
+            print("* creds.token\t\t", creds.token)
+            print("* creds.refresh_token\t", creds.refresh_token)
+            print("* creds.valid\t\t", creds.valid)
+            print("* creds.expired\t\t", creds.expired)
+        else:
+            print("Missing/invalid credentials!")
+        exit()
+
+    # Refresh & save credentials
     gdrive_utils.refresh_credentials(creds)
     gdrive_utils.save_credentials(creds)
 

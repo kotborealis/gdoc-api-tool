@@ -1,13 +1,15 @@
 # gdoc-api-tool
 
 ```shell script
-usage: main.py [-h] [--auth-url] [--auth-code AUTH_CODE] [--create FILE_NAME]
-               [--type {spreadsheet,document}]
+$ python main.py --help
+usage: main.py [-h] [--auth-info] [--auth-url] [--auth-code AUTH_CODE]
+               [--create FILE_NAME] [--type {spreadsheet,document}]
 
 Google Drive Tools.
 
 optional arguments:
   -h, --help            show this help message and exit
+  --auth-info           Print credentials info
   --auth-url            Call Google OAuth and show authentication URL
   --auth-code AUTH_CODE
                         Send authentication code to Google OAuth to obtain new
@@ -64,6 +66,15 @@ $ python3 main.py --create g_spreadsheet --type spreadsheet
 ```
 
 # Debug
+
+Use `--auth-info` to output loaded credentials info:
+```shell script
+$ python main.py --auth-info
+* creds.token            ya29.a0AfH6...
+* creds.refresh_token    1//0cT3Rqxy...
+* creds.valid            True
+* creds.expired          False
+``` 
 
 Run with `LOGLEVEL=DEBUG` environment variable to see debug output:
 ```shell script
