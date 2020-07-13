@@ -4,6 +4,11 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import logging
+import os
+
+LOGLEVEL = os.environ.get('LOGLEVEL', 'WARNING').upper()
+logging.basicConfig(level=LOGLEVEL)
 
 # Requires drive.file scope to read/write files
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
@@ -19,29 +24,41 @@ mime_types = {
 def load_credentials():
     """Loads credentials from file named `token.pickle`"""
 
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
+    logging.debug("Loading credentials from ./token.pickle")
 
-    if creds and creds.valid:
-        return creds
+    creds = None
+    if os.path.exists('./token.pickle'):
+        with open('./token.pickle', 'rb') as token:
+            creds = pickle.load(token)
     else:
-        return False
+        logging.debug("./token.pickle does not exist!")
+
+    if not creds:
+        logging.debug("Pickle returned false while loading ./token.pickle")
+    else:
+        logging.debug("Loaded token.pickle: %s", creds.to_json())
+        logging.debug("Valid=%s, Expired=%s", creds.valid, creds.expired)
+
+    return creds
 
 
 def save_credentials(creds):
     """Save credentials to file named `token.pickle`"""
 
-    with open('token.pickle', 'wb') as token:
+    logging.debug("Saving credentials to ./token.pickle: %s", creds.to_json())
+
+    with open('./token.pickle', 'wb') as token:
         pickle.dump(creds, token)
 
 
 def refresh_credentials(creds):
     """Refresh credentials using refresh token"""
 
-    if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
+    logging.debug("Refreshing credentials: %s", creds.to_json())
+
+    creds.refresh(Request())
+
+    logging.debug("Refreshed credentials: %s", creds.to_json())
 
 
 def auth_url():

@@ -62,3 +62,19 @@ $ python3 main.py --create g_document --type document
 $ python3 main.py --create g_spreadsheet --type spreadsheet
 ... 
 ```
+
+# Debug
+
+Run with `LOGLEVEL=DEBUG` environment variable to see debug output:
+```shell script
+$ LOGLEVEL=DEBUG python main.py
+DEBUG:root:Loading credentials from ./token.pickle
+DEBUG:root:Loaded token.pickle: {"refresh_token": "...", ...}
+DEBUG:root:Valid=True, Expired=False
+DEBUG:root:Refreshing credentials: {"refresh_token": "...", ...}
+DEBUG:google.auth.transport.requests:Making request: POST https://oauth2.googleapis.com/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): oauth2.googleapis.com:443
+DEBUG:urllib3.connectionpool:https://oauth2.googleapis.com:443 "POST /token HTTP/1.1" 200 None
+DEBUG:root:Refreshed credentials: {"refresh_token": "...", ...}
+DEBUG:root:Saving credentials to ./token.pickle: {"refresh_token": "...", ...}
+```
