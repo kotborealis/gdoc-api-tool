@@ -1,13 +1,15 @@
 import argparse
 import gdrive_utils
 import json
+import sys
 
 
 def main():
     """gdoc-api-tool entrypoint"""
 
     # Arguments parser
-    parser = argparse.ArgumentParser(description='Google Drive Tools.')
+    parser = argparse.ArgumentParser(description='Google Drive Tools.',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('--auth-info',
                         action='store_true',
@@ -29,6 +31,10 @@ def main():
                         default='document',
                         choices=gdrive_utils.mime_types.keys(),
                         help='Document type')
+
+    if len(sys.argv) < 2:
+        parser.print_help()
+        exit(1)
 
     args = parser.parse_args()
 
